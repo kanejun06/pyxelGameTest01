@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Break the Blocks - Pyxel Web</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a1a1a;
+            font-family: Arial, sans-serif;
+        }
+        #game-container {
+            text-align: center;
+        }
+        #canvas {
+            background-color: black;
+            margin-bottom: 20px;
+        }
+        .instructions {
+            color: white;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        h1 {
+            color: #ff7f50;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Break the Blocks</h1>
+        <canvas id="canvas"></canvas>
+        <div class="instructions">
+            <h2>操作方法</h2>
+            <p>左右矢印キー：パドルを移動<br>
+            スペースキー：ゲームオーバー/クリア時に再スタート</p>
+        </div>
+    </div>
+    <script type="module">
+        import * as pyxel from "https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"
+        
+        async function main() {
+            await pyxel.init()
+            await pyxel.load("simple_game.py")
+            await pyxel.run()
+        }
+        
+        main()
+    </script>
+</body>
+</html>
