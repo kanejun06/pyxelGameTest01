@@ -3,7 +3,7 @@ import math
 import random
 import time
 
-TOUCH_CONTROL = True  # タッチ操作の有効化フラグ
+TOUCH_CONTROL = False  # タッチ操作の有効化フラグ
 
 class Particle:
     def __init__(self, x, y, color):
