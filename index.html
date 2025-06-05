@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Break the Blocks - Pyxel Web</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -15,106 +14,28 @@
             background-color: #1a1a1a;
             font-family: Arial, sans-serif;
             flex-direction: column;
-        }
-        #game-container {
-            text-align: center;
-            position: relative;
-        }
-        canvas {
-            background-color: black;
-            margin-bottom: 20px;
-            width: 640px;
-            height: 480px;
-        }
-        .instructions {
             color: white;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
         }
         h1 {
             color: #ff7f50;
             margin-bottom: 20px;
         }
-        .start-button {
-            background-color: #ff7f50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .start-button:hover {
-            background-color: #ff6b3d;
-        }
-        #error-message {
-            color: #ff5555;
-            margin-top: 10px;
-            display: none;
+        .instructions {
+            margin: 20px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <h1>Break the Blocks</h1>
-        <button id="startButton" class="start-button">ゲームを開始</button>
-        <div id="error-message"></div>
-        <div class="instructions">
-            <h2>操作方法</h2>
-            <p>左右矢印キー：パドルを移動<br>
-            スペースキー：ゲームオーバー/クリア時に再スタート</p>
-        </div>
+    <h1>Break the Blocks</h1>
+    <div class="instructions">
+        <h2>操作方法</h2>
+        <p>
+            左右矢印キー：パドルを移動<br>
+            スペースキー：ゲームオーバー/クリア時に再スタート
+        </p>
     </div>
-    <script type="module">
-        import { loadPyxel } from "https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js";
-
-        window.addEventListener('load', async () => {
-            const startButton = document.getElementById('startButton');
-            const errorMessage = document.getElementById('error-message');
-
-            startButton.addEventListener('click', async () => {
-                try {
-                    startButton.disabled = true;
-                    errorMessage.style.display = 'none';
-
-                    // Load Pyxel
-                    const pyxel = await loadPyxel();
-                    
-                    // Fetch the Python code
-                    const response = await fetch('simple_game.py');
-                    if (!response.ok) {
-                        throw new Error('Failed to load game code');
-                    }
-                    const code = await response.text();
-
-                    // Initialize Pyxel
-                    await pyxel.init({
-                        width: 160,
-                        height: 120,
-                        title: "Break the Blocks",
-                        caption: "Break the Blocks"
-                    });
-
-                    // Execute the game code
-                    await pyxel.exec(code);
-                    
-                    // Hide the start button
-                    startButton.style.display = 'none';
-                    
-                    // Start the game
-                    await pyxel.run();
-                } catch (error) {
-                    console.error('Error starting game:', error);
-                    errorMessage.textContent = 'ゲームの起動に失敗しました: ' + error.message;
-                    errorMessage.style.display = 'block';
-                    startButton.disabled = false;
-                }
-            });
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
+    <pyxel-run name="simple_game.py"></pyxel-run>
 </body>
 </html>
