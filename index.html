@@ -15,15 +15,17 @@
             min-height: 100vh;
             background-color: #1a1a1a;
             font-family: Arial, sans-serif;
+            flex-direction: column;
         }
         #game-container {
             text-align: center;
+            position: relative;
         }
-        #canvas {
+        canvas {
             background-color: black;
             margin-bottom: 20px;
-            width: 160px;
-            height: 120px;
+            width: 640px;
+            height: 480px;
         }
         .instructions {
             color: white;
@@ -50,13 +52,18 @@
         .start-button:hover {
             background-color: #ff6b3d;
         }
+        #error-message {
+            color: #ff5555;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div id="game-container">
         <h1>Break the Blocks</h1>
         <button id="startButton" class="start-button">ゲームを開始</button>
-        <canvas id="canvas"></canvas>
+        <div id="error-message"></div>
         <div class="instructions">
             <h2>操作方法</h2>
             <p>左右矢印キー：パドルを移動<br>
@@ -64,12 +71,23 @@
         </div>
     </div>
     <script>
-        window.addEventListener('load', () => {
-            document.getElementById('startButton').addEventListener('click', async () => {
+        window.addEventListener('load', async () => {
+            const startButton = document.getElementById('startButton');
+            const errorMessage = document.getElementById('error-message');
+
+            startButton.addEventListener('click', async () => {
                 try {
-                    document.getElementById('startButton').style.display = 'none';
-                    
-                    // Pyxelの初期化
+                    startButton.disabled = true;
+                    errorMessage.style.display = 'none';
+
+                    // Fetch the Python code
+                    const response = await fetch('simple_game.py');
+                    if (!response.ok) {
+                        throw new Error('Failed to load game code');
+                    }
+                    const code = await response.text();
+
+                    // Initialize Pyxel
                     await pyxel.init({
                         width: 160,
                         height: 120,
@@ -77,20 +95,19 @@
                         caption: "Break the Blocks"
                     });
 
-                    // Pythonコードの読み込みと実行
-                    const response = await fetch('simple_game.py');
-                    if (!response.ok) {
-                        throw new Error('Failed to load game code');
-                    }
-                    const code = await response.text();
+                    // Execute the game code
                     await pyxel.exec(code);
                     
-                    // ゲームの実行
+                    // Hide the start button
+                    startButton.style.display = 'none';
+                    
+                    // Start the game
                     await pyxel.run();
                 } catch (error) {
                     console.error('Error starting game:', error);
-                    alert('ゲームの起動に失敗しました: ' + error.message);
-                    document.getElementById('startButton').style.display = 'block';
+                    errorMessage.textContent = 'ゲームの起動に失敗しました: ' + error.message;
+                    errorMessage.style.display = 'block';
+                    startButton.disabled = false;
                 }
             });
         });
