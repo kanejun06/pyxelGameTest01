@@ -34,11 +34,25 @@
             color: #ff7f50;
             margin-bottom: 20px;
         }
+        .start-button {
+            background-color: #ff7f50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .start-button:hover {
+            background-color: #ff6b3d;
+        }
     </style>
 </head>
 <body>
     <div id="game-container">
         <h1>Break the Blocks</h1>
+        <button id="startButton" class="start-button">ゲームを開始</button>
         <canvas id="canvas"></canvas>
         <div class="instructions">
             <h2>操作方法</h2>
@@ -49,13 +63,23 @@
     <script type="module">
         import * as pyxel from "https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"
         
-        async function main() {
-            await pyxel.init()
-            await pyxel.load("simple_game.py")
-            await pyxel.run()
+        async function startGame() {
+            try {
+                await pyxel.init()
+                const response = await fetch('simple_game.py')
+                const code = await response.text()
+                await pyxel.exec(code)
+                await pyxel.run()
+            } catch (error) {
+                console.error('Error starting game:', error)
+                alert('ゲームの起動に失敗しました。')
+            }
         }
         
-        main()
+        document.getElementById('startButton').addEventListener('click', () => {
+            document.getElementById('startButton').style.display = 'none'
+            startGame()
+        })
     </script>
 </body>
 </html>
