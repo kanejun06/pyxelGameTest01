@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Break the Blocks - Pyxel Web</title>
+    <script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
     <style>
         body {
             margin: 0;
@@ -21,6 +22,8 @@
         #canvas {
             background-color: black;
             margin-bottom: 20px;
+            width: 160px;
+            height: 120px;
         }
         .instructions {
             color: white;
@@ -60,26 +63,37 @@
             スペースキー：ゲームオーバー/クリア時に再スタート</p>
         </div>
     </div>
-    <script type="module">
-        import * as pyxel from "https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"
-        
-        async function startGame() {
-            try {
-                await pyxel.init()
-                const response = await fetch('simple_game.py')
-                const code = await response.text()
-                await pyxel.exec(code)
-                await pyxel.run()
-            } catch (error) {
-                console.error('Error starting game:', error)
-                alert('ゲームの起動に失敗しました。')
-            }
-        }
-        
-        document.getElementById('startButton').addEventListener('click', () => {
-            document.getElementById('startButton').style.display = 'none'
-            startGame()
-        })
+    <script>
+        window.addEventListener('load', () => {
+            document.getElementById('startButton').addEventListener('click', async () => {
+                try {
+                    document.getElementById('startButton').style.display = 'none';
+                    
+                    // Pyxelの初期化
+                    await pyxel.init({
+                        width: 160,
+                        height: 120,
+                        title: "Break the Blocks",
+                        caption: "Break the Blocks"
+                    });
+
+                    // Pythonコードの読み込みと実行
+                    const response = await fetch('simple_game.py');
+                    if (!response.ok) {
+                        throw new Error('Failed to load game code');
+                    }
+                    const code = await response.text();
+                    await pyxel.exec(code);
+                    
+                    // ゲームの実行
+                    await pyxel.run();
+                } catch (error) {
+                    console.error('Error starting game:', error);
+                    alert('ゲームの起動に失敗しました: ' + error.message);
+                    document.getElementById('startButton').style.display = 'block';
+                }
+            });
+        });
     </script>
 </body>
 </html>
