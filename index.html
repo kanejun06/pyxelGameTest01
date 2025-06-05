@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Break the Blocks - Pyxel Web</title>
-    <script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
     <style>
         body {
             margin: 0;
@@ -70,7 +69,9 @@
             スペースキー：ゲームオーバー/クリア時に再スタート</p>
         </div>
     </div>
-    <script>
+    <script type="module">
+        import { loadPyxel } from "https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js";
+
         window.addEventListener('load', async () => {
             const startButton = document.getElementById('startButton');
             const errorMessage = document.getElementById('error-message');
@@ -80,6 +81,9 @@
                     startButton.disabled = true;
                     errorMessage.style.display = 'none';
 
+                    // Load Pyxel
+                    const pyxel = await loadPyxel();
+                    
                     // Fetch the Python code
                     const response = await fetch('simple_game.py');
                     if (!response.ok) {
