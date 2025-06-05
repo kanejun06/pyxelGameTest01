@@ -36,13 +36,13 @@
     <div class="instructions">
         <h2>操作方法</h2>
         <p>
-            矢印キー：四角形を移動<br>
-            （テスト用の簡易版です）
+            左右矢印キー：パドルを移動<br>
+            スペースキー：ゲームオーバー/クリア時に再スタート
         </p>
     </div>
     <div id="error-message"></div>
     <script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
-    <pyxel-run name="test_game.py"></pyxel-run>
+    <pyxel-run name="simple_game.py"></pyxel-run>
     <script>
         window.addEventListener('error', function(e) {
             document.getElementById('error-message').textContent = 'エラーが発生しました: ' + e.message;
