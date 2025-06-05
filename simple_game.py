@@ -289,12 +289,22 @@ class App:
                     combo_text = f"COMBO BONUS! -{self.combo_bonus:.1f}s (Max {self.max_combo} combo)"
                     pyxel.text(30 + shake_x, self.clear_message_y + 20 + shake_y, combo_text, 11)
                 
+                # オリジナルの時間を表示
+                original_time = self.clear_time + self.bonus_time
+                o_minutes = int(original_time // 60)
+                o_seconds = int(original_time % 60)
+                o_milliseconds = int((original_time * 100) % 100)
+                original_text = f"ORIGINAL TIME: {o_minutes:02d}:{o_seconds:02d}.{o_milliseconds:02d}"
+                pyxel.text(35 + shake_x, self.clear_message_y + 30 + shake_y, original_text, 13)
+                
+                # ボーナス適用後の最終時間を表示（色を変更）
                 final_time = self.clear_time
                 f_minutes = int(final_time // 60)
                 f_seconds = int(final_time % 60)
                 f_milliseconds = int((final_time * 100) % 100)
                 final_text = f"FINAL TIME: {f_minutes:02d}:{f_seconds:02d}.{f_milliseconds:02d}"
-                pyxel.text(35 + shake_x, self.clear_message_y + 30 + shake_y, final_text, 7)
+                # 色を11（ライトイエロー）に変更し、より目立つように
+                pyxel.text(35 + shake_x, self.clear_message_y + 40 + shake_y, final_text, 11)
             
             if TOUCH_CONTROL:
                 pyxel.text(40 + shake_x, self.clear_message_y + 45 + shake_y, "TOUCH TO RESTART", 6)
